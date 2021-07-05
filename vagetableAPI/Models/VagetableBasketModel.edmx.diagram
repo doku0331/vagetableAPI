@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3394f7e6cb7448f99e591ddd19312c46" Name="Diagram1">
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Food" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Fridge" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Ingredient" Width="1.5" PointX="5.25" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Log" Width="1.5" PointX="3" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Member" Width="1.5" PointX="0.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Message" Width="1.5" PointX="5.25" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Own_Fridge" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.Recipe" Width="1.5" PointX="3" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbVagetableBasketModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Food__fridge_id__276EDEB3" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Log__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Own_Fridge__fid__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Ingredien__recip__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Log__account__2A4B4B5E" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Message__account__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Own_Fridg__accou__71D1E811" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Recipe__account__31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.FK__Message__recipe___38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="dbVagetableBasketModel.C_Collection" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
