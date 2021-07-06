@@ -14,12 +14,13 @@ using System.Web.Configuration;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
+using System.Web.Http;
 
 namespace vagetableAPI.Filters
 {
-    public class JwtAuthorizeAttribute : ActionFilterAttribute
+    public class JwtAuthorizeAttribute : AuthorizeAttribute
     {
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public override void OnAuthorization(HttpActionContext actionContext)
         {
            //從config取得密鑰
             var secret = WebConfigurationManager.AppSettings["SecretKey"].ToString();
@@ -68,7 +69,7 @@ namespace vagetableAPI.Filters
                     setErrorResponse(actionContext, ex.Message);
                 }
             }
-            base.OnActionExecuting(actionContext);
+            base.OnAuthorization(actionContext);
         }
 
         //回覆401
