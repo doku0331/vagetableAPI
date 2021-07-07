@@ -15,41 +15,43 @@
         </EntityType>
         <EntityType Name="Food">
           <Key>
-            <PropertyRef Name="food_name" />
+            <PropertyRef Name="id" />
             <PropertyRef Name="fridge_id" />
           </Key>
-          <Property Name="food_name" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fridge_id" Type="int" Nullable="false" />
-          <Property Name="price" Type="int" Nullable="false" />
+          <Property Name="food_name" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="price" Type="int" />
           <Property Name="photo" Type="nvarchar(max)" />
           <Property Name="type" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="expire_date" Type="datetime" Nullable="false" />
+          <Property Name="comment" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Fridge">
           <Key>
             <PropertyRef Name="fId" />
           </Key>
-          <Property Name="fId" Type="int" Nullable="false" />
+          <Property Name="fId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fName" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Ingredient">
           <Key>
-            <PropertyRef Name="iid" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="recipe_id" Type="int" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="amount" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="iid" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Log">
           <Key>
             <PropertyRef Name="account" />
-            <PropertyRef Name="food_name" />
+            <PropertyRef Name="food_id" />
             <PropertyRef Name="fridge_id" />
             <PropertyRef Name="buy_time" />
           </Key>
           <Property Name="account" Type="nvarchar" MaxLength="15" Nullable="false" />
-          <Property Name="food_name" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="food_id" Type="int" Nullable="false" />
           <Property Name="fridge_id" Type="int" Nullable="false" />
           <Property Name="buy_time" Type="datetime" Nullable="false" />
           <Property Name="price" Type="int" Nullable="false" />
@@ -80,7 +82,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fid" Type="int" Nullable="false" />
           <Property Name="account" Type="nvarchar" MaxLength="15" Nullable="false" />
         </EntityType>
@@ -88,7 +90,7 @@
           <Key>
             <PropertyRef Name="recipe_id" />
           </Key>
-          <Property Name="recipe_id" Type="int" Nullable="false" />
+          <Property Name="recipe_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="recipe_name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="recipe_photo" Type="nvarchar(max)" />
           <Property Name="step" Type="nvarchar(max)" />
@@ -129,7 +131,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Food__fridge_id__276EDEB3">
+        <Association Name="FK__Food__fridge_id__339FAB6E">
           <End Role="Fridge" Type="Self.Fridge" Multiplicity="1" />
           <End Role="Food" Type="Self.Food" Multiplicity="*" />
           <ReferentialConstraint>
@@ -153,21 +155,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Log__2B3F6F97">
+        <Association Name="FK__Log__2FCF1A8A">
           <End Role="Food" Type="Self.Food" Multiplicity="1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Food">
-              <PropertyRef Name="food_name" />
+              <PropertyRef Name="id" />
               <PropertyRef Name="fridge_id" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="food_name" />
+              <PropertyRef Name="food_id" />
               <PropertyRef Name="fridge_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Log__account__2A4B4B5E">
+        <Association Name="FK__Log__account__2EDAF651">
           <End Role="Member" Type="Self.Member" Multiplicity="1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
@@ -203,7 +205,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Own_Fridg__accou__71D1E811">
+        <Association Name="FK__Own_Fridg__accou__37703C52">
           <End Role="Member" Type="Self.Member" Multiplicity="1" />
           <End Role="Own_Fridge" Type="Self.Own_Fridge" Multiplicity="*" />
           <ReferentialConstraint>
@@ -215,7 +217,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Own_Fridge__fid__72C60C4A">
+        <Association Name="FK__Own_Fridge__fid__367C1819">
           <End Role="Fridge" Type="Self.Fridge" Multiplicity="1" />
           <End Role="Own_Fridge" Type="Self.Own_Fridge" Multiplicity="*" />
           <ReferentialConstraint>
@@ -258,7 +260,7 @@
             <End Role="Recipe" EntitySet="Recipe" />
             <End Role=" Collection" EntitySet=" Collection" />
           </AssociationSet>
-          <AssociationSet Name="FK__Food__fridge_id__276EDEB3" Association="Self.FK__Food__fridge_id__276EDEB3">
+          <AssociationSet Name="FK__Food__fridge_id__339FAB6E" Association="Self.FK__Food__fridge_id__339FAB6E">
             <End Role="Fridge" EntitySet="Fridge" />
             <End Role="Food" EntitySet="Food" />
           </AssociationSet>
@@ -266,11 +268,11 @@
             <End Role="Recipe" EntitySet="Recipe" />
             <End Role="Ingredient" EntitySet="Ingredient" />
           </AssociationSet>
-          <AssociationSet Name="FK__Log__2B3F6F97" Association="Self.FK__Log__2B3F6F97">
+          <AssociationSet Name="FK__Log__2FCF1A8A" Association="Self.FK__Log__2FCF1A8A">
             <End Role="Food" EntitySet="Food" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
-          <AssociationSet Name="FK__Log__account__2A4B4B5E" Association="Self.FK__Log__account__2A4B4B5E">
+          <AssociationSet Name="FK__Log__account__2EDAF651" Association="Self.FK__Log__account__2EDAF651">
             <End Role="Member" EntitySet="Member" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
@@ -282,11 +284,11 @@
             <End Role="Recipe" EntitySet="Recipe" />
             <End Role="Message" EntitySet="Message" />
           </AssociationSet>
-          <AssociationSet Name="FK__Own_Fridg__accou__71D1E811" Association="Self.FK__Own_Fridg__accou__71D1E811">
+          <AssociationSet Name="FK__Own_Fridg__accou__37703C52" Association="Self.FK__Own_Fridg__accou__37703C52">
             <End Role="Member" EntitySet="Member" />
             <End Role="Own_Fridge" EntitySet="Own_Fridge" />
           </AssociationSet>
-          <AssociationSet Name="FK__Own_Fridge__fid__72C60C4A" Association="Self.FK__Own_Fridge__fid__72C60C4A">
+          <AssociationSet Name="FK__Own_Fridge__fid__367C1819" Association="Self.FK__Own_Fridge__fid__367C1819">
             <End Role="Fridge" EntitySet="Fridge" />
             <End Role="Own_Fridge" EntitySet="Own_Fridge" />
           </AssociationSet>
@@ -302,52 +304,54 @@
       <Schema Namespace="dbVagetableBasketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Food">
           <Key>
-            <PropertyRef Name="food_name" />
+            <PropertyRef Name="id" />
             <PropertyRef Name="fridge_id" />
           </Key>
-          <Property Name="food_name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fridge_id" Type="Int32" Nullable="false" />
-          <Property Name="price" Type="Int32" Nullable="false" />
+          <Property Name="food_name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Int32" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="type" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="expire_date" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Fridge" Relationship="Self.FK__Food__fridge_id__276EDEB3" FromRole="Food" ToRole="Fridge" />
-          <NavigationProperty Name="Log" Relationship="Self.FK__Log__2B3F6F97" FromRole="Food" ToRole="Log" />
+          <Property Name="comment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Fridge" Relationship="Self.FK__Food__fridge_id__339FAB6E" FromRole="Food" ToRole="Fridge" />
+          <NavigationProperty Name="Log" Relationship="Self.FK__Log__2FCF1A8A" FromRole="Food" ToRole="Log" />
         </EntityType>
         <EntityType Name="Fridge">
           <Key>
             <PropertyRef Name="fId" />
           </Key>
-          <Property Name="fId" Type="Int32" Nullable="false" />
+          <Property Name="fId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Food" Relationship="Self.FK__Food__fridge_id__276EDEB3" FromRole="Fridge" ToRole="Food" />
-          <NavigationProperty Name="Own_Fridge" Relationship="Self.FK__Own_Fridge__fid__72C60C4A" FromRole="Fridge" ToRole="Own_Fridge" />
+          <NavigationProperty Name="Food" Relationship="Self.FK__Food__fridge_id__339FAB6E" FromRole="Fridge" ToRole="Food" />
+          <NavigationProperty Name="Own_Fridge" Relationship="Self.FK__Own_Fridge__fid__367C1819" FromRole="Fridge" ToRole="Own_Fridge" />
         </EntityType>
         <EntityType Name="Ingredient">
           <Key>
-            <PropertyRef Name="iid" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="recipe_id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="amount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="iid" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Recipe" Relationship="Self.FK__Ingredien__recip__3C69FB99" FromRole="Ingredient" ToRole="Recipe" />
         </EntityType>
         <EntityType Name="Log">
           <Key>
             <PropertyRef Name="account" />
-            <PropertyRef Name="food_name" />
+            <PropertyRef Name="food_id" />
             <PropertyRef Name="fridge_id" />
             <PropertyRef Name="buy_time" />
           </Key>
           <Property Name="account" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="food_name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="food_id" Type="Int32" Nullable="false" />
           <Property Name="fridge_id" Type="Int32" Nullable="false" />
           <Property Name="buy_time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="price" Type="Int32" Nullable="false" />
           <Property Name="type" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Food" Relationship="Self.FK__Log__2B3F6F97" FromRole="Log" ToRole="Food" />
-          <NavigationProperty Name="Member" Relationship="Self.FK__Log__account__2A4B4B5E" FromRole="Log" ToRole="Member" />
+          <NavigationProperty Name="Food" Relationship="Self.FK__Log__2FCF1A8A" FromRole="Log" ToRole="Food" />
+          <NavigationProperty Name="Member" Relationship="Self.FK__Log__account__2EDAF651" FromRole="Log" ToRole="Member" />
         </EntityType>
         <EntityType Name="Member">
           <Key>
@@ -358,9 +362,9 @@
           <Property Name="mName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="authCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Log" Relationship="Self.FK__Log__account__2A4B4B5E" FromRole="Member" ToRole="Log" />
+          <NavigationProperty Name="Log" Relationship="Self.FK__Log__account__2EDAF651" FromRole="Member" ToRole="Log" />
           <NavigationProperty Name="Message" Relationship="Self.FK__Message__account__398D8EEE" FromRole="Member" ToRole="Message" />
-          <NavigationProperty Name="Own_Fridge" Relationship="Self.FK__Own_Fridg__accou__71D1E811" FromRole="Member" ToRole="Own_Fridge" />
+          <NavigationProperty Name="Own_Fridge" Relationship="Self.FK__Own_Fridg__accou__37703C52" FromRole="Member" ToRole="Own_Fridge" />
           <NavigationProperty Name="Recipe" Relationship="Self.FK__Recipe__account__31EC6D26" FromRole="Member" ToRole="Recipe" />
           <NavigationProperty Name="Recipe1" Relationship="Self.C_Collection" FromRole="Member" ToRole="Recipe" />
         </EntityType>
@@ -381,17 +385,17 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fid" Type="Int32" Nullable="false" />
           <Property Name="account" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Fridge" Relationship="Self.FK__Own_Fridge__fid__72C60C4A" FromRole="Own_Fridge" ToRole="Fridge" />
-          <NavigationProperty Name="Member" Relationship="Self.FK__Own_Fridg__accou__71D1E811" FromRole="Own_Fridge" ToRole="Member" />
+          <NavigationProperty Name="Fridge" Relationship="Self.FK__Own_Fridge__fid__367C1819" FromRole="Own_Fridge" ToRole="Fridge" />
+          <NavigationProperty Name="Member" Relationship="Self.FK__Own_Fridg__accou__37703C52" FromRole="Own_Fridge" ToRole="Member" />
         </EntityType>
         <EntityType Name="Recipe">
           <Key>
             <PropertyRef Name="recipe_id" />
           </Key>
-          <Property Name="recipe_id" Type="Int32" Nullable="false" />
+          <Property Name="recipe_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="recipe_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="recipe_photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="step" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -412,7 +416,7 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <Association Name="FK__Food__fridge_id__276EDEB3">
+        <Association Name="FK__Food__fridge_id__339FAB6E">
           <End Role="Fridge" Type="Self.Fridge" Multiplicity="1" />
           <End Role="Food" Type="Self.Food" Multiplicity="*" />
           <ReferentialConstraint>
@@ -424,21 +428,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Log__2B3F6F97">
+        <Association Name="FK__Log__2FCF1A8A">
           <End Role="Food" Type="Self.Food" Multiplicity="1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Food">
-              <PropertyRef Name="food_name" />
+              <PropertyRef Name="id" />
               <PropertyRef Name="fridge_id" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="food_name" />
+              <PropertyRef Name="food_id" />
               <PropertyRef Name="fridge_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Own_Fridge__fid__72C60C4A">
+        <Association Name="FK__Own_Fridge__fid__367C1819">
           <End Role="Fridge" Type="Self.Fridge" Multiplicity="1" />
           <End Role="Own_Fridge" Type="Self.Own_Fridge" Multiplicity="*" />
           <ReferentialConstraint>
@@ -462,7 +466,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Log__account__2A4B4B5E">
+        <Association Name="FK__Log__account__2EDAF651">
           <End Role="Member" Type="Self.Member" Multiplicity="1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
@@ -486,7 +490,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Own_Fridg__accou__71D1E811">
+        <Association Name="FK__Own_Fridg__accou__37703C52">
           <End Role="Member" Type="Self.Member" Multiplicity="1" />
           <End Role="Own_Fridge" Type="Self.Own_Fridge" Multiplicity="*" />
           <ReferentialConstraint>
@@ -536,15 +540,15 @@
           <EntitySet Name="Own_Fridge" EntityType="Self.Own_Fridge" />
           <EntitySet Name="Recipe" EntityType="Self.Recipe" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <AssociationSet Name="FK__Food__fridge_id__276EDEB3" Association="Self.FK__Food__fridge_id__276EDEB3">
+          <AssociationSet Name="FK__Food__fridge_id__339FAB6E" Association="Self.FK__Food__fridge_id__339FAB6E">
             <End Role="Fridge" EntitySet="Fridge" />
             <End Role="Food" EntitySet="Food" />
           </AssociationSet>
-          <AssociationSet Name="FK__Log__2B3F6F97" Association="Self.FK__Log__2B3F6F97">
+          <AssociationSet Name="FK__Log__2FCF1A8A" Association="Self.FK__Log__2FCF1A8A">
             <End Role="Food" EntitySet="Food" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
-          <AssociationSet Name="FK__Own_Fridge__fid__72C60C4A" Association="Self.FK__Own_Fridge__fid__72C60C4A">
+          <AssociationSet Name="FK__Own_Fridge__fid__367C1819" Association="Self.FK__Own_Fridge__fid__367C1819">
             <End Role="Fridge" EntitySet="Fridge" />
             <End Role="Own_Fridge" EntitySet="Own_Fridge" />
           </AssociationSet>
@@ -552,7 +556,7 @@
             <End Role="Recipe" EntitySet="Recipe" />
             <End Role="Ingredient" EntitySet="Ingredient" />
           </AssociationSet>
-          <AssociationSet Name="FK__Log__account__2A4B4B5E" Association="Self.FK__Log__account__2A4B4B5E">
+          <AssociationSet Name="FK__Log__account__2EDAF651" Association="Self.FK__Log__account__2EDAF651">
             <End Role="Member" EntitySet="Member" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
@@ -560,7 +564,7 @@
             <End Role="Member" EntitySet="Member" />
             <End Role="Message" EntitySet="Message" />
           </AssociationSet>
-          <AssociationSet Name="FK__Own_Fridg__accou__71D1E811" Association="Self.FK__Own_Fridg__accou__71D1E811">
+          <AssociationSet Name="FK__Own_Fridg__accou__37703C52" Association="Self.FK__Own_Fridg__accou__37703C52">
             <End Role="Member" EntitySet="Member" />
             <End Role="Own_Fridge" EntitySet="Own_Fridge" />
           </AssociationSet>
@@ -586,12 +590,14 @@
           <EntitySetMapping Name="Food">
             <EntityTypeMapping TypeName="dbVagetableBasketModel.Food">
               <MappingFragment StoreEntitySet="Food">
-                <ScalarProperty Name="food_name" ColumnName="food_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="fridge_id" ColumnName="fridge_id" />
+                <ScalarProperty Name="food_name" ColumnName="food_name" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="photo" ColumnName="photo" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="expire_date" ColumnName="expire_date" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -606,10 +612,10 @@
           <EntitySetMapping Name="Ingredient">
             <EntityTypeMapping TypeName="dbVagetableBasketModel.Ingredient">
               <MappingFragment StoreEntitySet="Ingredient">
+                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="recipe_id" ColumnName="recipe_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="amount" ColumnName="amount" />
-                <ScalarProperty Name="iid" ColumnName="iid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -617,7 +623,7 @@
             <EntityTypeMapping TypeName="dbVagetableBasketModel.Log">
               <MappingFragment StoreEntitySet="Log">
                 <ScalarProperty Name="account" ColumnName="account" />
-                <ScalarProperty Name="food_name" ColumnName="food_name" />
+                <ScalarProperty Name="food_id" ColumnName="food_id" />
                 <ScalarProperty Name="fridge_id" ColumnName="fridge_id" />
                 <ScalarProperty Name="buy_time" ColumnName="buy_time" />
                 <ScalarProperty Name="price" ColumnName="price" />

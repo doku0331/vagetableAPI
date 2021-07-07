@@ -3,7 +3,7 @@ Content-Type: application/json
 除了寫不須授權的其餘都要在header加上授權token
 Authorization: Bearer {token}' 
 
-
+api/Token
 * 取得token
 method:POST
 path: api/Token

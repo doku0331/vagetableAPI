@@ -32,6 +32,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\vagetableAPI.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,6 +55,9 @@
       <HintPath>..\packages\jose-jwt.3.1.1\lib\net461\jose-jwt.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -78,6 +83,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -119,82 +127,88 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Models\VagetableBasketModel.Context.tt">
+    <Content Include="Models\dbvagetableModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>VagetableBasketModel.Context.cs</LastGenOutput>
-      <DependentUpon>VagetableBasketModel.edmx</DependentUpon>
+      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
+      <LastGenOutput>dbvagetableModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\VagetableBasketModel.tt">
+    <Content Include="Models\dbvagetableModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>VagetableBasketModel.edmx</DependentUpon>
-      <LastGenOutput>VagetableBasketModel.cs</LastGenOutput>
+      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
+      <LastGenOutput>dbvagetableModel.cs</LastGenOutput>
     </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FoodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
+    <Compile Include="Filters\CustomException.cs" />
+    <Compile Include="Filters\ExceptionAttribute.cs" />
     <Compile Include="Filters\JwtAuthActionFilter.cs" />
+    <Compile Include="Filters\ResultAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\dbvagetableModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dbvagetableModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dbvagetableModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dbvagetableModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Food.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Fridge.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Ingredient.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Log.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Member.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Message.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Own_Fridge.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Recipe.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VagetableBasketModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>VagetableBasketModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VagetableBasketModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>VagetableBasketModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VagetableBasketModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>VagetableBasketModel.edmx</DependentUpon>
+      <DependentUpon>dbvagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtObject.cs" />
+    <Compile Include="ViewModels\FoodListViewModel.cs" />
     <Compile Include="ViewModels\MembersLoginViewModel.cs" />
+    <Compile Include="ViewModels\ResultViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <EntityDeploy Include="Models\VagetableBasketModel.edmx">
+    <EntityDeploy Include="Models\dbvagetableModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>VagetableBasketModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>dbvagetableModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\VagetableBasketModel.edmx.diagram">
-      <DependentUpon>VagetableBasketModel.edmx</DependentUpon>
+    <Content Include="Models\dbvagetableModel.edmx.diagram">
+      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
     <Content Include="readme.md" />

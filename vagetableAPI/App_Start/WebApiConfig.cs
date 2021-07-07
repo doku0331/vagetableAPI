@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using vagetableAPI.Filters;
 
 namespace vagetableAPI
 {
@@ -11,6 +12,7 @@ namespace vagetableAPI
         public static void Register(HttpConfiguration config)
         {
             // Web API 設定和服務
+            config.Filters.Add(new ExceptionAttribute());
 
             //使所有api接受cors請求，上線時請修改 否則形同落奔
             var cors = new EnableCorsAttribute("*", "*", "*");

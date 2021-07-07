@@ -8,8 +8,13 @@ using vagetableAPI.Filters;
 
 namespace vagetableAPI.Controllers
 {
+    [Result]
     public class HomeController : ApiController
     {
+        /// <summary>
+        /// 測試有無登入
+        /// </summary>
+        /// <returns></returns>
         [JwtAuthorize]
         [Route("api/home")]
         // GET: api/

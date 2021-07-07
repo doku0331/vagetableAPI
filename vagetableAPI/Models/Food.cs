@@ -9,6 +9,7 @@
 
 namespace vagetableAPI.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -20,14 +21,18 @@ namespace vagetableAPI.Models
             this.Log = new HashSet<Log>();
         }
     
-        public string food_name { get; set; }
+        public int id { get; set; }
         public int fridge_id { get; set; }
-        public int price { get; set; }
+        public string food_name { get; set; }
+        public Nullable<int> price { get; set; }
         public string photo { get; set; }
         public string type { get; set; }
         public System.DateTime expire_date { get; set; }
-    
+        public string comment { get; set; }
+
+        [JsonIgnore]
         public virtual Fridge Fridge { get; set; }
+        [JsonIgnore]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Log> Log { get; set; }
     }

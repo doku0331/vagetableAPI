@@ -14,10 +14,10 @@ namespace vagetableAPI.Models
     
     public partial class Ingredient
     {
+        public int id { get; set; }
         public int recipe_id { get; set; }
         public string name { get; set; }
         public string amount { get; set; }
-        public int iid { get; set; }
     
         public virtual Recipe Recipe { get; set; }
     }

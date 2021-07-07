@@ -15,7 +15,7 @@ namespace vagetableAPI.Models
     public partial class Log
     {
         public string account { get; set; }
-        public string food_name { get; set; }
+        public int food_id { get; set; }
         public int fridge_id { get; set; }
         public System.DateTime buy_time { get; set; }
         public int price { get; set; }
