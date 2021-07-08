@@ -12,7 +12,9 @@ namespace vagetableAPI.Models
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Food
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,11 +25,28 @@ namespace vagetableAPI.Models
     
         public int id { get; set; }
         public int fridge_id { get; set; }
+
+        [DisplayName("食物名稱")]
+        [Required(ErrorMessage = "請輸入食物名稱")]
+        [StringLength(10, ErrorMessage = "商品名稱不可大於10字元")]
         public string food_name { get; set; }
+
+
+        [DisplayName("價格")]
+        [Range(typeof(int), "1", "99999", ErrorMessage = "價格請介於1-99999")]
         public Nullable<int> price { get; set; }
         public string photo { get; set; }
+
+        [DisplayName("類別")]
         public string type { get; set; }
+
+        [DisplayName("過期日")]
+        [DataType(DataType.Date)]
         public System.DateTime expire_date { get; set; }
+
+
+        [DisplayName("附註事項，非必要，最多五十字")]
+        [StringLength(50, ErrorMessage = "最多五十個字")]
         public string comment { get; set; }
 
         [JsonIgnore]

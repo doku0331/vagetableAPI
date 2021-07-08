@@ -22,7 +22,16 @@ namespace vagetableAPI.Filters
     {
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-           //從config取得密鑰
+            //取得controller 和action上的attribute確定有無AllowanymousAttribute
+            if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0)
+            {
+                return;
+            }
+            if (actionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0)
+            {
+                return;
+            }
+            //從config取得密鑰
             var secret = WebConfigurationManager.AppSettings["SecretKey"].ToString();
 
             if (actionContext.Request.Headers.Authorization == null

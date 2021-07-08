@@ -11,7 +11,8 @@ namespace vagetableAPI.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Fridge
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,6 +23,9 @@ namespace vagetableAPI.Models
         }
     
         public int fId { get; set; }
+
+        [Required]
+        [StringLength(10, ErrorMessage = "名稱不可大於10字元")]
         public string fName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -11,6 +11,7 @@ using System.Web;
 using vagetableAPI.Security;
 using vagetableAPI.Models;
 using vagetableAPI.ViewModels;
+using vagetableAPI.Filters;
 
 namespace vagetableAPI.Controllers
 {
@@ -38,7 +39,6 @@ namespace vagetableAPI.Controllers
                 //返回token
                 return new
                 {
-                    Result = true,
                     token = Jose.JWT.Encode(payload, Encoding.UTF8.GetBytes(secret), JwsAlgorithm.HS256)
                 };
             }
@@ -47,7 +47,6 @@ namespace vagetableAPI.Controllers
                 //返回錯誤的token
                 return new
                 {
-                    status = false,
                     token = "Account Or Password Error"
                 };
             }

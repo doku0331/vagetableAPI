@@ -8,7 +8,6 @@ using vagetableAPI.Filters;
 
 namespace vagetableAPI.Controllers
 {
-    [Result]
     public class HomeController : ApiController
     {
         /// <summary>

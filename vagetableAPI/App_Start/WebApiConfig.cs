@@ -13,6 +13,7 @@ namespace vagetableAPI
         {
             // Web API 設定和服務
             config.Filters.Add(new ExceptionAttribute());
+            config.Filters.Add(new ResultAttribute());
 
             //使所有api接受cors請求，上線時請修改 否則形同落奔
             var cors = new EnableCorsAttribute("*", "*", "*");

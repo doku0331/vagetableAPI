@@ -144,7 +144,9 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FoodController.cs" />
+    <Compile Include="Controllers\fridgeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Filters\CustomException.cs" />
     <Compile Include="Filters\ExceptionAttribute.cs" />
@@ -197,6 +199,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtObject.cs" />
+    <Compile Include="Service\JwtService.cs" />
+    <Compile Include="Service\MailService.cs" />
+    <Compile Include="Service\MembersDBService.cs" />
+    <Compile Include="ViewModels\ExpiredFoodViewModel.cs" />
     <Compile Include="ViewModels\FoodListViewModel.cs" />
     <Compile Include="ViewModels\MembersLoginViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
@@ -221,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Config\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
