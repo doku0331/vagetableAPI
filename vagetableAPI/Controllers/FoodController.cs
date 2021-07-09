@@ -30,8 +30,7 @@ namespace vagetableAPI.Controllers
         public FoodListViewModel Getfood(int fridgeid)
         {
             //找出冰箱跟其使用者資料
-            var OwnFridge = db.Own_Fridge.Where(x => x.fid == fridgeid).FirstOrDefault();
-
+            var OwnFridge = db.Own_Fridge.Where(x => x.fid == fridgeid && x.account == User.Identity.Name).FirstOrDefault();
             //判斷使用者是否擁有該冰箱
             if (User.Identity.Name != OwnFridge.account)
             {

@@ -9,6 +9,7 @@
 
 namespace vagetableAPI.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -27,9 +28,13 @@ namespace vagetableAPI.Models
         [Required]
         [StringLength(10, ErrorMessage = "名稱不可大於10字元")]
         public string fName { get; set; }
-    
+
+
+        [JsonIgnore]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Food> Food { get; set; }
+
+        [JsonIgnore]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Own_Fridge> Own_Fridge { get; set; }
     }

@@ -161,14 +161,6 @@ namespace vagetableAPI.Controllers
                 throw new Exception(ex.ToString());
             }
         }
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("api/test")]
-        public object test() {
-            // 寄驗證信給新的會員
-            mailService.SendRegisterMail(mailService.GetRegisterMailBody("acc", "code"), "email");
-            return "test";
-        }
 
     }
 }

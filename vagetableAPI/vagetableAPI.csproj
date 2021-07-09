@@ -204,6 +204,7 @@
     <Compile Include="Service\MembersDBService.cs" />
     <Compile Include="ViewModels\ExpiredFoodViewModel.cs" />
     <Compile Include="ViewModels\FoodListViewModel.cs" />
+    <Compile Include="ViewModels\FrigEditViewModel.cs" />
     <Compile Include="ViewModels\MembersLoginViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
   </ItemGroup>

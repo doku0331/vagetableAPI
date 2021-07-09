@@ -9,6 +9,7 @@
 
 namespace vagetableAPI.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -17,8 +18,12 @@ namespace vagetableAPI.Models
         public int id { get; set; }
         public int fid { get; set; }
         public string account { get; set; }
-    
+
+
+        [JsonIgnore]
         public virtual Fridge Fridge { get; set; }
+
+        [JsonIgnore]
         public virtual Member Member { get; set; }
     }
 }
