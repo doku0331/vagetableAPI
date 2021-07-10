@@ -27,21 +27,21 @@ namespace vagetableAPI.Controllers
         // GET: api/Food
         [HttpGet]
         [Route("api/food/Getfood/{fridgeid}")]
-        public FoodListViewModel Getfood(int fridgeid)
+        public FoodListViewModel Getfood(int fridgeId)
         {
-            if (!fridgeService.OwnFridgeCheck(fridgeid,User.Identity.Name)) {
+            if (!fridgeService.OwnFridgeCheck(fridgeId,User.Identity.Name)) {
                 throw new CustomException("你沒有冰箱權限");
             }
 
             //取出冰箱中的食物
-            var food = db.Food.Where(m => m.fridge_id == fridgeid).ToList();
+            var food = db.Food.Where(m => m.fridge_id == fridgeId).ToList();
             //把資料放入viewModel
             var model = new FoodListViewModel
             {
                 //當前冰箱的id
-                fridgeId = fridgeid,
+                fridgeId = fridgeId,
                 //冰箱的名稱
-                FridgeName = db.Fridge.Where(x => x.fId == fridgeid).First().fName,
+                FridgeName = db.Fridge.Where(x => x.fId == fridgeId).First().fName,
                 //冰箱內食物資料
                 food = food,
             };
@@ -93,6 +93,11 @@ namespace vagetableAPI.Controllers
         [HttpPost]
         public object Search(int fridgeId,string search)
         {
+            if (!fridgeService.OwnFridgeCheck(fridgeId, User.Identity.Name))
+            {
+                throw new CustomException("你沒有冰箱權限");
+            }
+
             //找出冰箱跟其使用者資料
             var OwnFridge = db.Own_Fridge.Where(x => x.fid == fridgeId).FirstOrDefault();
 
