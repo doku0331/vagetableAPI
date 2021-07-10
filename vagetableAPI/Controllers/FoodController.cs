@@ -8,7 +8,7 @@ using vagetableAPI.Models;
 using vagetableAPI.Filters;
 using System.Web.Http.Description;
 using vagetableAPI.ViewModels;
-
+using vagetableAPI.Service;
 
 namespace vagetableAPI.Controllers
 {
@@ -17,7 +17,7 @@ namespace vagetableAPI.Controllers
     { 
         //建立存取資料庫的實體
         dbVagetableBasketEntities db = new dbVagetableBasketEntities();
-
+        FridgeService fridgeService = new FridgeService();
         /// <summary>
         /// 取得指定冰箱中的食物
         /// </summary>
@@ -29,15 +29,12 @@ namespace vagetableAPI.Controllers
         [Route("api/food/Getfood/{fridgeid}")]
         public FoodListViewModel Getfood(int fridgeid)
         {
-            //找出冰箱跟其使用者資料
-            var OwnFridge = db.Own_Fridge.Where(x => x.fid == fridgeid && x.account == User.Identity.Name).FirstOrDefault();
-            //判斷使用者是否擁有該冰箱
-            if (User.Identity.Name != OwnFridge.account)
-            {
+            if (!fridgeService.OwnFridgeCheck(fridgeid,User.Identity.Name)) {
                 throw new CustomException("你沒有冰箱權限");
             }
-            var food = db.Food.Where(m => m.fridge_id == fridgeid).ToList();
 
+            //取出冰箱中的食物
+            var food = db.Food.Where(m => m.fridge_id == fridgeid).ToList();
             //把資料放入viewModel
             var model = new FoodListViewModel
             {
@@ -89,9 +86,39 @@ namespace vagetableAPI.Controllers
                                 expire_date = x.expire_date,
                                 fName = y.fName
                             }).ToList();
-
             return expireds;
+        }
+
+        //POST:Food/List 
+        [HttpPost]
+        public object Search(int fridgeId,string search)
+        {
+            //找出冰箱跟其使用者資料
+            var OwnFridge = db.Own_Fridge.Where(x => x.fid == fridgeId).FirstOrDefault();
+
+            //撈出所有在指定冰箱中的食物
+            var query = db.Food.Where(x => x.fridge_id == fridgeId).AsQueryable();
+
+            //搜尋字串不為空白則搜尋
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(
+                    x => x.food_name.Contains(search));
+            }
+            //將搜尋到的資料按照日期排列
+            query = query.OrderBy(x => x.expire_date);
+
+            //把資料放入viewModel
+            var result = new FoodListViewModel
+            {
+                fridgeId = fridgeId,
+                FridgeName = db.Fridge.Where(x => x.fId == fridgeId).First().fName,
+                food = query.ToList()
+            };
+
+            return result;
 
         }
+
     }
 }

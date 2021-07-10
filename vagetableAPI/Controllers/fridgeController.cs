@@ -7,6 +7,7 @@ using System.Web.Http;
 using vagetableAPI.Filters;
 using vagetableAPI.Models;
 using vagetableAPI.ViewModels;
+using vagetableAPI.Service;
 
 namespace vagetableAPI.Controllers
 {
@@ -16,21 +17,7 @@ namespace vagetableAPI.Controllers
         //建立存取資料庫的實體
         dbVagetableBasketEntities db = new dbVagetableBasketEntities();
 
-        //確認使用者是否有冰箱全縣
-        private bool OwnFridgeCheck(int fridgeid)
-        {
-            //找出冰箱跟其使用者資料
-            var OwnFridge = db.Own_Fridge.Where(x => x.fid == fridgeid && x.account == User.Identity.Name).FirstOrDefault();
-            //判斷當下使用者是否擁有該冰箱
-            if (User.Identity.Name != OwnFridge.account)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        FridgeService fridgeService = new FridgeService();
 
         /// <summary>
         /// 列出所有冰箱
@@ -97,16 +84,13 @@ namespace vagetableAPI.Controllers
         [Route("api/fridge/GetOwner/{fridgeid}/")]
         public object GetOwner(int fridgeid)
         {
-            if (OwnFridgeCheck(fridgeid))
-            {
-                var Owner = db.Own_Fridge.Where(n => n.fid == fridgeid).Select(x=> x.account).ToList();
-                return Owner;
-            }
-            else
+            if (!fridgeService.OwnFridgeCheck(fridgeid, User.Identity.Name))
             {
                 throw new CustomException("你沒有冰箱權限");
             }
-                
+           
+            var Owner = db.Own_Fridge.Where(n => n.fid == fridgeid).Select(x=> x.account).ToList();
+            return Owner;
         }
 
         /// <summary>
@@ -120,60 +104,55 @@ namespace vagetableAPI.Controllers
         [Route("api/fridge/Edit/{fridgeid}/")]
         public object Edit(int fridgeid, FrigEditViewModel frigEdit)
         {
-            if (OwnFridgeCheck(fridgeid))
-            {
-                //撈出當下冰箱資料
-                var nowFridge = db.Fridge.Where(m => m.fId == fridgeid).FirstOrDefault();
-                string nowFridgename = nowFridge.fName.ToString();
-
-                //確認是否有更改冰箱名稱
-                if (!string.IsNullOrWhiteSpace(frigEdit.fName) && frigEdit.fName != nowFridgename)
-                {
-                    nowFridge.fName = frigEdit.fName;
-                    db.SaveChanges();
-                }
-                //撈出會員
-                var member = db.Member
-                            .Where(m => m.account == frigEdit.user)
-                            .FirstOrDefault();
-                //新增使用者不為空
-                if (!string.IsNullOrWhiteSpace(frigEdit.user))
-                {
-                    //使用者存在 且不存在當下使用者清單 則加入使用者為共用
-                    if (member != null)
-                    {
-                        //確認輸入的使用者是否已經是該冰箱擁有者
-                        var owner = db.Own_Fridge.Where(x => x.fid == fridgeid && x.account == frigEdit.user).FirstOrDefault();
-                        if (owner == null)
-                        {
-                            Own_Fridge owntemp = new Own_Fridge
-                            {
-                                fid = fridgeid,
-                                account = frigEdit.user
-                            };
-                            //新增
-                            db.Own_Fridge.Add(owntemp);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-
-                            throw new CustomException("會員已經是冰箱使用者");
-                        }
-                    }
-                    else
-                    {
-                        throw new CustomException("欲新增之會員不存在");
-                    }
-                }
-                //可能有編輯過名稱或成員，但兩者皆空也有可能
-                return Ok("編輯完成");
-            }
-            else
+            if (!fridgeService.OwnFridgeCheck(fridgeid, User.Identity.Name))
             {
                 throw new CustomException("你沒有冰箱權限");
             }
-          
+            //撈出當下冰箱資料
+            var nowFridgename = db.Fridge.Where(m => m.fId == fridgeid).Select(x=>x.fName).FirstOrDefault();
+
+            //確認是否有更改冰箱名稱
+            if (!string.IsNullOrWhiteSpace(frigEdit.fName) && frigEdit.fName != nowFridgename)
+            {
+                nowFridgename = frigEdit.fName;
+                db.SaveChanges();
+            }
+            
+            //新增使用者不為空
+            if (!string.IsNullOrWhiteSpace(frigEdit.user))
+            {   
+                //撈出會員
+                var member = db.Member.Where(m => m.account == frigEdit.user).FirstOrDefault();
+                //確認輸入的使用者是否已經是該冰箱擁有者
+                var owner = db.Own_Fridge.Where(x => x.fid == fridgeid && x.account == frigEdit.user).FirstOrDefault();
+                //使用者存在 且不存在當下使用者清單 則加入使用者為共用
+                if (member == null)
+                {
+                    throw new CustomException("欲新增之會員不存在");
+                }
+                if (owner != null)
+                {
+                    throw new CustomException("會員已經是冰箱使用者");
+                }
+                try
+                { 
+                    //建立擁有者的物件
+                    Own_Fridge owntemp = new Own_Fridge
+                    {
+                        fid = fridgeid,
+                        account = frigEdit.user
+                    };
+                    //新增
+                    db.Own_Fridge.Add(owntemp);
+                    db.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    throw new CustomException(ex.ToString());
+                }
+            }
+            //可能有編輯過名稱或成員，但兩者皆空也有可能
+            return Ok("編輯完成");
         }
 
         /// <summary>
@@ -185,35 +164,34 @@ namespace vagetableAPI.Controllers
         [Route("api/fridge/Delete/{fridgeid}")]
         public object Delete(int fridgeid)
         {
-            if (OwnFridgeCheck(fridgeid))
-            {
-                try
-                {
-                    //撈出該冰箱
-                    var fridge = (from m in db.Fridge
-                                  where m.fId == fridgeid
-                                  select m).FirstOrDefault();
-
-                    //撈出該冰箱相關之擁有者與食物全部刪除
-                    var del1 = db.Own_Fridge.Where(m => m.fid == fridgeid);
-                    var del2 = db.Food.Where(m => m.fridge_id == fridgeid);
-                    db.Own_Fridge.RemoveRange(del1);
-                    db.Food.RemoveRange(del2);
-                    //刪除冰箱
-                    db.Fridge.Remove(fridge);
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw new CustomException("刪除錯誤" + ex.ToString());
-                }
-
-                return Ok("刪除成功");
-            }
-            else
+            if (!fridgeService.OwnFridgeCheck(fridgeid, User.Identity.Name))
             {
                 throw new CustomException("你沒有冰箱權限");
             }
+            try
+            {
+                //撈出該冰箱
+                var fridge = (from m in db.Fridge
+                              where m.fId == fridgeid
+                              select m).FirstOrDefault();
+
+                //撈出該冰箱相關之擁有者與食物全部刪除
+                var del1 = db.Own_Fridge.Where(m => m.fid == fridgeid);
+                var del2 = db.Food.Where(m => m.fridge_id == fridgeid);
+                db.Own_Fridge.RemoveRange(del1);
+                db.Food.RemoveRange(del2);
+                //刪除冰箱
+                db.Fridge.Remove(fridge);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException("刪除錯誤" + ex.ToString());
+            }
+
+            return Ok("刪除成功");
+            
+            
         }
 
         /// <summary>
@@ -226,27 +204,25 @@ namespace vagetableAPI.Controllers
         [Route("api/fridge/OwnerDelete/{fid}/{userid}")]
         public object OwnerDel(int fid, string userid)
         {
-            if (OwnFridgeCheck(fid))
-            {
-                //撈出該擁有者
-                var owner = db.Own_Fridge.Where(x => x.account == userid && x.fid == fid).FirstOrDefault();
-                try
-                {
-                    //移除
-                    db.Own_Fridge.Remove(owner);
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw new CustomException("刪除錯誤" + ex.ToString());
-                }
-
-                return Ok("刪除成功");
-            }
-            else
+            if (!fridgeService.OwnFridgeCheck(fid, User.Identity.Name))
             {
                 throw new CustomException("你沒有冰箱權限");
             }
+            //撈出該擁有者
+            var owner = db.Own_Fridge.Where(x => x.account == userid && x.fid == fid).FirstOrDefault();
+            try
+            {
+                //移除
+                db.Own_Fridge.Remove(owner);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException("刪除錯誤" + ex.ToString());
+            }
+
+            return Ok("刪除成功");
+            
         }
     }
 }

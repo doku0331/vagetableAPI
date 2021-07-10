@@ -362,3 +362,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /vagetableAPI/Service/setting.json
+
+
+#ignore upload's picture
+Upload/*
+
