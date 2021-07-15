@@ -65,7 +65,7 @@ namespace vagetableAPI.Controllers
         /// <summary>
         /// 註冊
         /// </summary>
-        /// <param name="newMember">會員的資料</param>
+        /// <param name="newMember">會員的資料，帳號、密碼、姓名、email</param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
@@ -116,9 +116,7 @@ namespace vagetableAPI.Controllers
 
         public class RegisterValidateViewModel
         {
-
             public string Account { get; set; }
-
             public string authCode { get; set; }
         }
         /// <summary>

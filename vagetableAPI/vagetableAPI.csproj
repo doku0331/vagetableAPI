@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Models\dbvagetableModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -147,6 +148,7 @@
     <Compile Include="Controllers\fridgeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\testController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Filters\CustomException.cs" />
     <Compile Include="Filters\ExceptionAttribute.cs" />
@@ -204,9 +206,11 @@
     <Compile Include="Service\MailService.cs" />
     <Compile Include="Service\MembersDBService.cs" />
     <Compile Include="ViewModels\ExpiredFoodViewModel.cs" />
+    <Compile Include="ViewModels\FoodCreateViewModel.cs" />
     <Compile Include="ViewModels\FoodListViewModel.cs" />
     <Compile Include="ViewModels\FrigEditViewModel.cs" />
     <Compile Include="ViewModels\MembersLoginViewModel.cs" />
+    <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +224,9 @@
     </Content>
     <None Include="packages.config" />
     <Content Include="readme.md" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\test.cshtml" />
+    <Content Include="Views\test\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

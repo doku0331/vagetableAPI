@@ -93,13 +93,14 @@ namespace vagetableAPI.Controllers
             return Owner;
         }
 
+        // TODO: 把新增成員做成連結讓人加入
+
         /// <summary>
         /// 修改指定冰箱的名稱或是成員
         /// </summary>
         /// <param name="fridgeid">冰箱id</param>
         /// <param name="frigEdit">冰箱編輯的資料</param>
         /// <returns></returns>
-        // TODO: 把新增成員做成連結讓人加入
         [HttpPost]
         [Route("api/fridge/Edit/{fridgeid}/")]
         public object Edit(int fridgeid, FrigEditViewModel frigEdit)
