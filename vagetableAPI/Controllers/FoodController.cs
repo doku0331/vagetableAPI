@@ -138,68 +138,113 @@ namespace vagetableAPI.Controllers
         #endregion 
 
         /// <summary>
-        /// 新增食物進冰箱
+        /// 新增食物進冰箱 注意: 若有圖片請使用 Content-Type:multipart/form-data
         /// </summary>
         /// <param name="fridgeId"></param>
-        /// <param name="model">需要必要(食物名稱、類型、過期日)非必要(照片、價格、註解)</param>
+        /// <param name="model">需要必要(food_name、type、expire_date)非必要(photo、價格、註解)</param>
         /// <returns></returns>
         [HttpPost]
         [Route("api/food/Create/{fridgeId}")]
-        public object Create(int fridgeId, Food model)
+        public object Create(int fridgeId)
         {
             if (!fridgeService.OwnFridgeCheck(fridgeId, User.Identity.Name))
             {
                 throw new CustomException("你沒有冰箱權限");
             }
-
-            //取得當前的 request 物件
-            var httpRequest = HttpContext.Current.Request;
-            //request 如有夾帶檔案
-            if (httpRequest.Files.Count > 0)
+            // 如果 Content-Type 沒有 multipart/form-data 就回傳 415
+            if (!Request.Content.IsMimeMultipartContent())
             {
-                //逐一取得檔案名稱
-                foreach (string fileName in httpRequest.Files.Keys)
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            //取得httpcontext中的request
+            var request = HttpContext.Current.Request;
+            //取得請求中的表單資浪
+            var formData = request.Form;
+            //建立新的食物
+            var newfood = new Food
+            {
+                fridge_id = fridgeId,
+                food_name = formData["food_name"],
+                type = formData["type"],
+                expire_date = DateTime.Parse(formData["expire_date"]),
+                comment = formData["comment"]
+            };
+            //建立log物件實體
+            var log = new Log
+            {
+                account = User.Identity.Name,
+                fridge_id = fridgeId,
+                buy_time = DateTime.Now,
+                type = formData["type"]
+            };
+
+            if (formData["price"]!=null)
+            {
+                int price = Int32.Parse(formData["price"]);
+                newfood.price = price;
+                log.price = price;
+            }
+            //若有夾帶圖片
+            if (request.Files.Count > 0 && request.Files[0].ContentType!=null)
+            {
+                //取得圖片 預設只有一張
+                var file = request.Files[0];
+                //設定存檔目標路徑
+                var savePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "Upload/";
+                //如果不存在就建立
+                if (!Directory.Exists(savePath))
                 {
-                    //以檔案名稱從 request 的 Files 集合取得檔案內容
-                    var file = httpRequest.Files[fileName];
-                    //其他檔案處理
+                    Directory.CreateDirectory(savePath);
                 }
-
-                return Request.CreateResponse(HttpStatusCode.OK);
+                //存檔
+                file.SaveAs(savePath + file.FileName);
+                //把檔案名塞進新資料
+                newfood.photo = file.FileName;
             }
-            /*
-            //檢查image有沒有東西
-            if (model.ItemImage != null)
-            {
-                //取得檔名
-                string filename = Path.GetFileName(model.ItemImage.FileName);
-                //將檔案和伺服器上路徑合併
-                string Url = Path.Combine(HttpContext.Current.Server.MapPath("~/Upload/"), filename);
-                //將檔案儲存於伺服器上
-                model.ItemImage.SaveAs(Url);
-                //設定路徑
-                model.NewFood.photo = filename;
-            }
-            
-            //檢查模型有沒有通過驗證
-            if (ModelState.IsValid == false)
-            {
-                throw new CustomException("輸入資料不符合規範");
-            }
-            model.NewFood.fridge_id = fridgeId;
+            //將食物新增到資料表
             try
             {
-                //將食物新增到資料表
-                db.Food.Add(model.NewFood);
+                db.Food.Add(newfood);
                 db.SaveChanges();
             }
             catch (Exception ex)
             {
                 throw new CustomException(ex.ToString());
             }
-            */
+            //把剛剛新增的食物的id放進紀錄
+            log.food_id = db.Food.Where(x => x.fridge_id == fridgeId).Select(x => x.id).Max();
+            try
+            {
+                //將log新增到log
+                db.Log.Add(log);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(ex.ToString());
+            }
             return Ok("新增食物成功");
+        }
 
+
+        [HttpGet]
+        [Route("api/food/Delete/{fridgeid}/{id}")]
+        public object delete(int fridgeid, int id)
+        {
+            try
+            {
+                var deletefood = db.Food.Where(x => x.fridge_id == fridgeid && x.id == id).FirstOrDefault();
+                db.Food.Remove(deletefood);
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(ex.ToString());
+            }
+
+            return Ok("完成刪除");
         }
     }
 }
