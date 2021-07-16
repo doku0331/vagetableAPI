@@ -127,15 +127,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Models\dbvagetableModel.Context.tt">
+    <Content Include="Models\dbVagetableModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
-      <LastGenOutput>dbvagetableModel.Context.cs</LastGenOutput>
+      <DependentUpon>dbVagetableModel.edmx</DependentUpon>
+      <LastGenOutput>dbVagetableModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\dbvagetableModel.tt">
+    <Content Include="Models\dbVagetableModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
-      <LastGenOutput>dbvagetableModel.cs</LastGenOutput>
+      <DependentUpon>dbVagetableModel.edmx</DependentUpon>
+      <LastGenOutput>dbVagetableModel.cs</LastGenOutput>
     </Content>
     <Content Include="Web.config" />
   </ItemGroup>
@@ -146,6 +146,7 @@
     <Compile Include="Controllers\FoodController.cs" />
     <Compile Include="Controllers\fridgeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Filters\CustomException.cs" />
     <Compile Include="Filters\ExceptionAttribute.cs" />
     <Compile Include="Filters\JwtAuthActionFilter.cs" />
@@ -153,47 +154,56 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\dbvagetableModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dbvagetableModel.Context.tt</DependentUpon>
+    <Compile Include="Models\Collection.cs">
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\dbvagetableModel.cs">
+    <Compile Include="Models\dbVagetableModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\dbvagetableModel.Designer.cs">
+    <Compile Include="Models\dbVagetableModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dbVagetableModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dbVagetableModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Food.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Fridge.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Ingredient.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Interest.cs">
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Log.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Member.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Message.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Own_Fridge.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Recipe.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
-      <DependentUpon>dbvagetableModel.tt</DependentUpon>
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tag.cs">
+      <DependentUpon>dbVagetableModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtObject.cs" />
@@ -211,12 +221,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <EntityDeploy Include="Models\dbvagetableModel.edmx">
+    <EntityDeploy Include="Models\dbVagetableModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>dbvagetableModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>dbVagetableModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\dbvagetableModel.edmx.diagram">
-      <DependentUpon>dbvagetableModel.edmx</DependentUpon>
+    <Content Include="Models\dbVagetableModel.edmx.diagram">
+      <DependentUpon>dbVagetableModel.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
     <Content Include="readme.md" />

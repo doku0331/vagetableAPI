@@ -17,9 +17,10 @@ namespace vagetableAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Recipe()
         {
+            this.Collection = new HashSet<Collection>();
             this.Ingredient = new HashSet<Ingredient>();
             this.Message = new HashSet<Message>();
-            this.Member1 = new HashSet<Member>();
+            this.Tag = new HashSet<Tag>();
         }
     
         public int recipe_id { get; set; }
@@ -30,11 +31,13 @@ namespace vagetableAPI.Models
         public string account { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Collection> Collection { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ingredient> Ingredient { get; set; }
         public virtual Member Member { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Message> Message { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Member> Member1 { get; set; }
+        public virtual ICollection<Tag> Tag { get; set; }
     }
 }

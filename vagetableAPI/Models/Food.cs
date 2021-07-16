@@ -28,7 +28,7 @@ namespace vagetableAPI.Models
 
         [DisplayName("食物名稱")]
         [Required(ErrorMessage = "請輸入食物名稱")]
-        [StringLength(10, ErrorMessage = "商品名稱不可大於10字元")]
+        [StringLength(50, ErrorMessage = "商品名稱不可大於50字元")]
         public string food_name { get; set; }
 
 

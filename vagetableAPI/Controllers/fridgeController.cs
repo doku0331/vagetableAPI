@@ -110,12 +110,12 @@ namespace vagetableAPI.Controllers
                 throw new CustomException("你沒有冰箱權限");
             }
             //撈出當下冰箱資料
-            var nowFridgename = db.Fridge.Where(m => m.fId == fridgeid).Select(x=>x.fName).FirstOrDefault();
+            var nowFridge = db.Fridge.Where(m => m.fId == fridgeid).FirstOrDefault();
 
             //確認是否有更改冰箱名稱
-            if (!string.IsNullOrWhiteSpace(frigEdit.fName) && frigEdit.fName != nowFridgename)
+            if (!string.IsNullOrWhiteSpace(frigEdit.fName) && frigEdit.fName != nowFridge.fName)
             {
-                nowFridgename = frigEdit.fName;
+                nowFridge.fName = frigEdit.fName;
                 db.SaveChanges();
             }
             

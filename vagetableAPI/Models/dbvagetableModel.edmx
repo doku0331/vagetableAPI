@@ -5,11 +5,11 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="dbVagetableBasketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name=" Collection">
+        <EntityType Name="Collection">
           <Key>
-            <PropertyRef Name="account" />
-            <PropertyRef Name="recipe_id" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="account" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="recipe_id" Type="int" Nullable="false" />
         </EntityType>
@@ -20,7 +20,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fridge_id" Type="int" Nullable="false" />
-          <Property Name="food_name" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="food_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="price" Type="int" />
           <Property Name="photo" Type="nvarchar(max)" />
           <Property Name="type" Type="nvarchar" MaxLength="5" Nullable="false" />
@@ -42,6 +42,14 @@
           <Property Name="recipe_id" Type="int" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="amount" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Interest">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="account" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="tag" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Log">
           <Key>
@@ -91,7 +99,7 @@
             <PropertyRef Name="recipe_id" />
           </Key>
           <Property Name="recipe_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="recipe_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="recipe_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="recipe_photo" Type="nvarchar(max)" />
           <Property Name="step" Type="nvarchar(max)" />
           <Property Name="created_time" Type="datetime" Nullable="false" />
@@ -107,26 +115,34 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
-        <Association Name="FK__ Collecti__accou__34C8D9D1">
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="recipe_id" Type="int" Nullable="false" />
+          <Property Name="tag" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Collectio__accou__58D1301D">
           <End Role="Member" Type="Self.Member" Multiplicity="1" />
-          <End Role=" Collection" Type="Self. Collection" Multiplicity="*" />
+          <End Role="Collection" Type="Self.Collection" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Member">
               <PropertyRef Name="account" />
             </Principal>
-            <Dependent Role=" Collection">
+            <Dependent Role="Collection">
               <PropertyRef Name="account" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ Collecti__recip__35BCFE0A">
+        <Association Name="FK__Collectio__recip__59C55456">
           <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
-          <End Role=" Collection" Type="Self. Collection" Multiplicity="*" />
+          <End Role="Collection" Type="Self.Collection" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Recipe">
               <PropertyRef Name="recipe_id" />
             </Principal>
-            <Dependent Role=" Collection">
+            <Dependent Role="Collection">
               <PropertyRef Name="recipe_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -152,6 +168,18 @@
             </Principal>
             <Dependent Role="Ingredient">
               <PropertyRef Name="recipe_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Interest__accoun__4F47C5E3">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="Interest" Type="Self.Interest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="account" />
+            </Principal>
+            <Dependent Role="Interest">
+              <PropertyRef Name="account" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -241,24 +269,38 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Tag__recipe_id__5224328E">
+          <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
+          <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipe">
+              <PropertyRef Name="recipe_id" />
+            </Principal>
+            <Dependent Role="Tag">
+              <PropertyRef Name="recipe_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="dbVagetableBasketModelStoreContainer">
-          <EntitySet Name=" Collection" EntityType="Self. Collection" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Collection" EntityType="Self.Collection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Food" EntityType="Self.Food" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Fridge" EntityType="Self.Fridge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Interest" EntityType="Self.Interest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Own_Fridge" EntityType="Self.Own_Fridge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Recipe" EntityType="Self.Recipe" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__ Collecti__accou__34C8D9D1" Association="Self.FK__ Collecti__accou__34C8D9D1">
+          <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Collectio__accou__58D1301D" Association="Self.FK__Collectio__accou__58D1301D">
             <End Role="Member" EntitySet="Member" />
-            <End Role=" Collection" EntitySet=" Collection" />
+            <End Role="Collection" EntitySet="Collection" />
           </AssociationSet>
-          <AssociationSet Name="FK__ Collecti__recip__35BCFE0A" Association="Self.FK__ Collecti__recip__35BCFE0A">
+          <AssociationSet Name="FK__Collectio__recip__59C55456" Association="Self.FK__Collectio__recip__59C55456">
             <End Role="Recipe" EntitySet="Recipe" />
-            <End Role=" Collection" EntitySet=" Collection" />
+            <End Role="Collection" EntitySet="Collection" />
           </AssociationSet>
           <AssociationSet Name="FK__Food__fridge_id__339FAB6E" Association="Self.FK__Food__fridge_id__339FAB6E">
             <End Role="Fridge" EntitySet="Fridge" />
@@ -267,6 +309,10 @@
           <AssociationSet Name="FK__Ingredien__recip__3C69FB99" Association="Self.FK__Ingredien__recip__3C69FB99">
             <End Role="Recipe" EntitySet="Recipe" />
             <End Role="Ingredient" EntitySet="Ingredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Interest__accoun__4F47C5E3" Association="Self.FK__Interest__accoun__4F47C5E3">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Interest" EntitySet="Interest" />
           </AssociationSet>
           <AssociationSet Name="FK__Log__2FCF1A8A" Association="Self.FK__Log__2FCF1A8A">
             <End Role="Food" EntitySet="Food" />
@@ -296,12 +342,26 @@
             <End Role="Member" EntitySet="Member" />
             <End Role="Recipe" EntitySet="Recipe" />
           </AssociationSet>
+          <AssociationSet Name="FK__Tag__recipe_id__5224328E" Association="Self.FK__Tag__recipe_id__5224328E">
+            <End Role="Recipe" EntitySet="Recipe" />
+            <End Role="Tag" EntitySet="Tag" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="dbVagetableBasketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Collection">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="account" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="recipe_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Member" Relationship="Self.FK__Collectio__accou__58D1301D" FromRole="Collection" ToRole="Member" />
+          <NavigationProperty Name="Recipe" Relationship="Self.FK__Collectio__recip__59C55456" FromRole="Collection" ToRole="Recipe" />
+        </EntityType>
         <EntityType Name="Food">
           <Key>
             <PropertyRef Name="id" />
@@ -309,7 +369,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fridge_id" Type="Int32" Nullable="false" />
-          <Property Name="food_name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="food_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="price" Type="Int32" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="type" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
@@ -337,6 +397,15 @@
           <Property Name="amount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Recipe" Relationship="Self.FK__Ingredien__recip__3C69FB99" FromRole="Ingredient" ToRole="Recipe" />
         </EntityType>
+        <EntityType Name="Interest">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="account" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="tag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Member" Relationship="Self.FK__Interest__accoun__4F47C5E3" FromRole="Interest" ToRole="Member" />
+        </EntityType>
         <EntityType Name="Log">
           <Key>
             <PropertyRef Name="account" />
@@ -362,11 +431,12 @@
           <Property Name="mName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="authCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Collection" Relationship="Self.FK__Collectio__accou__58D1301D" FromRole="Member" ToRole="Collection" />
+          <NavigationProperty Name="Interest" Relationship="Self.FK__Interest__accoun__4F47C5E3" FromRole="Member" ToRole="Interest" />
           <NavigationProperty Name="Log" Relationship="Self.FK__Log__account__2EDAF651" FromRole="Member" ToRole="Log" />
           <NavigationProperty Name="Message" Relationship="Self.FK__Message__account__398D8EEE" FromRole="Member" ToRole="Message" />
           <NavigationProperty Name="Own_Fridge" Relationship="Self.FK__Own_Fridg__accou__37703C52" FromRole="Member" ToRole="Own_Fridge" />
           <NavigationProperty Name="Recipe" Relationship="Self.FK__Recipe__account__31EC6D26" FromRole="Member" ToRole="Recipe" />
-          <NavigationProperty Name="Recipe1" Relationship="Self.C_Collection" FromRole="Member" ToRole="Recipe" />
         </EntityType>
         <EntityType Name="Message">
           <Key>
@@ -396,15 +466,16 @@
             <PropertyRef Name="recipe_id" />
           </Key>
           <Property Name="recipe_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="recipe_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="recipe_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="recipe_photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="step" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="created_time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="account" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Collection" Relationship="Self.FK__Collectio__recip__59C55456" FromRole="Recipe" ToRole="Collection" />
           <NavigationProperty Name="Ingredient" Relationship="Self.FK__Ingredien__recip__3C69FB99" FromRole="Recipe" ToRole="Ingredient" />
           <NavigationProperty Name="Member" Relationship="Self.FK__Recipe__account__31EC6D26" FromRole="Recipe" ToRole="Member" />
           <NavigationProperty Name="Message" Relationship="Self.FK__Message__recipe___38996AB5" FromRole="Recipe" ToRole="Message" />
-          <NavigationProperty Name="Member1" Relationship="Self.C_Collection" FromRole="Recipe" ToRole="Member" />
+          <NavigationProperty Name="Tag" Relationship="Self.FK__Tag__recipe_id__5224328E" FromRole="Recipe" ToRole="Tag" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -416,6 +487,39 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="recipe_id" Type="Int32" Nullable="false" />
+          <Property Name="tag1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Recipe" Relationship="Self.FK__Tag__recipe_id__5224328E" FromRole="Tag" ToRole="Recipe" />
+        </EntityType>
+        <Association Name="FK__Collectio__accou__58D1301D">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="Collection" Type="Self.Collection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="account" />
+            </Principal>
+            <Dependent Role="Collection">
+              <PropertyRef Name="account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Collectio__recip__59C55456">
+          <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
+          <End Role="Collection" Type="Self.Collection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipe">
+              <PropertyRef Name="recipe_id" />
+            </Principal>
+            <Dependent Role="Collection">
+              <PropertyRef Name="recipe_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Food__fridge_id__339FAB6E">
           <End Role="Fridge" Type="Self.Fridge" Multiplicity="1" />
           <End Role="Food" Type="Self.Food" Multiplicity="*" />
@@ -463,6 +567,18 @@
             </Principal>
             <Dependent Role="Ingredient">
               <PropertyRef Name="recipe_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Interest__accoun__4F47C5E3">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="Interest" Type="Self.Interest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="account" />
+            </Principal>
+            <Dependent Role="Interest">
+              <PropertyRef Name="account" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -526,20 +642,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="C_Collection">
-          <End Role="Member" Type="Self.Member" Multiplicity="*" />
-          <End Role="Recipe" Type="Self.Recipe" Multiplicity="*" />
+        <Association Name="FK__Tag__recipe_id__5224328E">
+          <End Role="Recipe" Type="Self.Recipe" Multiplicity="1" />
+          <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipe">
+              <PropertyRef Name="recipe_id" />
+            </Principal>
+            <Dependent Role="Tag">
+              <PropertyRef Name="recipe_id" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <EntityContainer Name="dbVagetableBasketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Collection" EntityType="Self.Collection" />
           <EntitySet Name="Food" EntityType="Self.Food" />
           <EntitySet Name="Fridge" EntityType="Self.Fridge" />
           <EntitySet Name="Ingredient" EntityType="Self.Ingredient" />
+          <EntitySet Name="Interest" EntityType="Self.Interest" />
           <EntitySet Name="Log" EntityType="Self.Log" />
           <EntitySet Name="Member" EntityType="Self.Member" />
           <EntitySet Name="Message" EntityType="Self.Message" />
           <EntitySet Name="Own_Fridge" EntityType="Self.Own_Fridge" />
           <EntitySet Name="Recipe" EntityType="Self.Recipe" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Tag" EntityType="Self.Tag" />
+          <AssociationSet Name="FK__Collectio__accou__58D1301D" Association="Self.FK__Collectio__accou__58D1301D">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Collection" EntitySet="Collection" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Collectio__recip__59C55456" Association="Self.FK__Collectio__recip__59C55456">
+            <End Role="Recipe" EntitySet="Recipe" />
+            <End Role="Collection" EntitySet="Collection" />
+          </AssociationSet>
           <AssociationSet Name="FK__Food__fridge_id__339FAB6E" Association="Self.FK__Food__fridge_id__339FAB6E">
             <End Role="Fridge" EntitySet="Fridge" />
             <End Role="Food" EntitySet="Food" />
@@ -555,6 +690,10 @@
           <AssociationSet Name="FK__Ingredien__recip__3C69FB99" Association="Self.FK__Ingredien__recip__3C69FB99">
             <End Role="Recipe" EntitySet="Recipe" />
             <End Role="Ingredient" EntitySet="Ingredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Interest__accoun__4F47C5E3" Association="Self.FK__Interest__accoun__4F47C5E3">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Interest" EntitySet="Interest" />
           </AssociationSet>
           <AssociationSet Name="FK__Log__account__2EDAF651" Association="Self.FK__Log__account__2EDAF651">
             <End Role="Member" EntitySet="Member" />
@@ -576,9 +715,9 @@
             <End Role="Recipe" EntitySet="Recipe" />
             <End Role="Message" EntitySet="Message" />
           </AssociationSet>
-          <AssociationSet Name="C_Collection" Association="Self.C_Collection">
-            <End Role="Member" EntitySet="Member" />
+          <AssociationSet Name="FK__Tag__recipe_id__5224328E" Association="Self.FK__Tag__recipe_id__5224328E">
             <End Role="Recipe" EntitySet="Recipe" />
+            <End Role="Tag" EntitySet="Tag" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -587,6 +726,15 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="dbVagetableBasketModelStoreContainer" CdmEntityContainer="dbVagetableBasketEntities">
+          <EntitySetMapping Name="Collection">
+            <EntityTypeMapping TypeName="dbVagetableBasketModel.Collection">
+              <MappingFragment StoreEntitySet="Collection">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="account" ColumnName="account" />
+                <ScalarProperty Name="recipe_id" ColumnName="recipe_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Food">
             <EntityTypeMapping TypeName="dbVagetableBasketModel.Food">
               <MappingFragment StoreEntitySet="Food">
@@ -616,6 +764,15 @@
                 <ScalarProperty Name="recipe_id" ColumnName="recipe_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="amount" ColumnName="amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Interest">
+            <EntityTypeMapping TypeName="dbVagetableBasketModel.Interest">
+              <MappingFragment StoreEntitySet="Interest">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="account" ColumnName="account" />
+                <ScalarProperty Name="tag" ColumnName="tag" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -685,14 +842,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="C_Collection" TypeName="dbVagetableBasketModel.C_Collection" StoreEntitySet=" Collection">
-            <EndProperty Name="Member">
-              <ScalarProperty Name="account" ColumnName="account" />
-            </EndProperty>
-            <EndProperty Name="Recipe">
-              <ScalarProperty Name="recipe_id" ColumnName="recipe_id" />
-            </EndProperty>
-          </AssociationSetMapping>
+          <EntitySetMapping Name="Tag">
+            <EntityTypeMapping TypeName="dbVagetableBasketModel.Tag">
+              <MappingFragment StoreEntitySet="Tag">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="recipe_id" ColumnName="recipe_id" />
+                <ScalarProperty Name="tag1" ColumnName="tag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

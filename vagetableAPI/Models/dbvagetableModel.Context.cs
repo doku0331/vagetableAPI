@@ -25,14 +25,17 @@ namespace vagetableAPI.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Collection> Collection { get; set; }
         public virtual DbSet<Food> Food { get; set; }
         public virtual DbSet<Fridge> Fridge { get; set; }
         public virtual DbSet<Ingredient> Ingredient { get; set; }
+        public virtual DbSet<Interest> Interest { get; set; }
         public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<Member> Member { get; set; }
         public virtual DbSet<Message> Message { get; set; }
         public virtual DbSet<Own_Fridge> Own_Fridge { get; set; }
         public virtual DbSet<Recipe> Recipe { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Tag> Tag { get; set; }
     }
 }
