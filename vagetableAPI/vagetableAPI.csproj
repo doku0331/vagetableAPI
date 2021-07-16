@@ -145,9 +145,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FoodController.cs" />
     <Compile Include="Controllers\fridgeController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
-    <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Filters\CustomException.cs" />
     <Compile Include="Filters\ExceptionAttribute.cs" />
     <Compile Include="Filters\JwtAuthActionFilter.cs" />

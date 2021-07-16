@@ -138,10 +138,9 @@ namespace vagetableAPI.Controllers
         #endregion 
 
         /// <summary>
-        /// 新增食物進冰箱 注意: 若有圖片請使用 Content-Type:multipart/form-data
+        /// 新增食物進冰箱 注意: 若有圖片請使用 Content-Type:multipart/form-data  需要必要(food_name、type、expire_date)非必要(photo、價格、註解)
         /// </summary>
         /// <param name="fridgeId"></param>
-        /// <param name="model">需要必要(food_name、type、expire_date)非必要(photo、價格、註解)</param>
         /// <returns></returns>
         [HttpPost]
         [Route("api/food/Create/{fridgeId}")]
