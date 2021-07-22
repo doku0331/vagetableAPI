@@ -229,7 +229,6 @@
       <DependentUpon>dbVagetableModel.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
-    <Content Include="readme.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

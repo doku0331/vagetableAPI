@@ -138,6 +138,7 @@ namespace vagetableAPI.Controllers
         }
         #endregion 
 
+        //TODO: 把上傳的圖片做重新命名的處理
         /// <summary>
         /// 新增食物進冰箱 注意:請使用 Content-Type:multipart/form-data  需要必要(food_name、type、expire_date)非必要(photo、價格、註解)
         /// </summary>
