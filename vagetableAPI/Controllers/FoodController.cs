@@ -22,23 +22,24 @@ namespace vagetableAPI.Controllers
         FridgeService fridgeService = new FridgeService();
 
         #region 取得食物
-
         /// <summary>
-        ///  取得指定冰箱中的食物
+        /// 取得指定冰箱中的食物
         /// </summary>
-        /// <param name="fridgeId"></param>
+        /// <param name="fridgeId">指定冰箱</param>
+        /// <param name="page">頁數</param>
         /// <returns></returns>
-        // GET: api/Food
         [HttpGet]
         [Route("api/food/Getfood/{fridgeid}")]
-        public FoodListViewModel Getfood(int fridgeId)
+        public FoodListViewModel Getfood(int fridgeId,int page= 1)
         {
             if (!fridgeService.OwnFridgeCheck(fridgeId,User.Identity.Name)) {
                 throw new CustomException("你沒有冰箱權限");
             }
 
+            //設定每一頁有多少資料
+            var pageSize = 5;
             //取出冰箱中的食物
-            var food = db.Food.Where(m => m.fridge_id == fridgeId).ToList();
+            var food = db.Food.Where(m => m.fridge_id == fridgeId);
             //把資料放入viewModel
             var model = new FoodListViewModel
             {
@@ -47,7 +48,7 @@ namespace vagetableAPI.Controllers
                 //冰箱的名稱
                 FridgeName = db.Fridge.Where(x => x.fId == fridgeId).First().fName,
                 //冰箱內食物資料
-                food = food,
+                food = food.OrderBy(x => x.expire_date).Skip((page - 1) * pageSize).Take(pageSize).ToList(),
             };
             return model;
         }
@@ -138,7 +139,7 @@ namespace vagetableAPI.Controllers
         #endregion 
 
         /// <summary>
-        /// 新增食物進冰箱 注意: 若有圖片請使用 Content-Type:multipart/form-data  需要必要(food_name、type、expire_date)非必要(photo、價格、註解)
+        /// 新增食物進冰箱 注意:請使用 Content-Type:multipart/form-data  需要必要(food_name、type、expire_date)非必要(photo、價格、註解)
         /// </summary>
         /// <param name="fridgeId"></param>
         /// <returns></returns>
@@ -226,7 +227,12 @@ namespace vagetableAPI.Controllers
             return Ok("新增食物成功");
         }
 
-
+        /// <summary>
+        /// 刪除
+        /// </summary>
+        /// <param name="fridgeid">冰箱id</param>
+        /// <param name="id">食物id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/food/Delete/{fridgeid}/{id}")]
         public object delete(int fridgeid, int id)
