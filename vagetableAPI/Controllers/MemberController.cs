@@ -44,7 +44,7 @@ namespace vagetableAPI.Controllers
             //若member為null，表示會員未註冊
             if (member == null)
             {
-               throw new CustomException("帳號或密碼錯誤，登入失敗！");
+                throw new CustomException("帳號或密碼錯誤，登入失敗！");
             }
             else if (membersService.PasswordCheck(member, loginData.Password) && member.authCode.First() == ' ')
             {
@@ -53,7 +53,7 @@ namespace vagetableAPI.Controllers
             }
             else if (!membersService.PasswordCheck(member, loginData.Password))
             {
-                throw new CustomException("密碼錯誤，登入失敗！");                
+                throw new CustomException("密碼錯誤，登入失敗！");
             }
             else
             {
@@ -62,15 +62,20 @@ namespace vagetableAPI.Controllers
 
         }
 
+        public class RegisterViewModel
+        {
+            public Member newMember { get; set; }
+            public List<string> interest { get; set; }
+        }
         /// <summary>
         /// 註冊
         /// </summary>
-        /// <param name="newMember">會員的資料，帳號、密碼、姓名、email</param>
+        /// <param name="model">會員的資料，帳號、密碼、姓名、email</param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [Route("api/Register")]
-        public object Register(Member newMember)
+        public object Register(RegisterViewModel model)
         {
             //若模型沒有通過驗證則顯示目前的View
             if (ModelState.IsValid == false)
@@ -80,38 +85,55 @@ namespace vagetableAPI.Controllers
 
             // 依帳號取得會員並指定給member
             var member = db.Member
-                .Where(m => m.account == newMember.account)
+                .Where(m => m.account == model.newMember.account)
                 .FirstOrDefault();
 
             //若member為null，表示會員未註冊
-            if (member == null)
+            if (member != null)
             {
-                try
-                {
-                    // Hash 使用者的密碼
-                    newMember.password = membersService.HashPassword(newMember.password);
+                throw new CustomException("此帳號己有人使用，註冊失敗！");
+            }
+            //發驗證信並新增會員
+            try
+            {
+                // Hash 使用者的密碼
+                model.newMember.password = membersService.HashPassword(model.newMember.password);
 
-                    // 先給一組驗證碼，並放入模型
-                    newMember.authCode = mailService.GetValidateCode();
+                // 先給一組驗證碼，並放入模型
+                model.newMember.authCode = mailService.GetValidateCode();
 
-                    // 寄驗證信給新的會員
-                    mailService.SendRegisterMail(mailService.GetRegisterMailBody(newMember.account, newMember.authCode), newMember.email);
+                // 寄驗證信給新的會員
+                mailService.SendRegisterMail(mailService.GetRegisterMailBody(model.newMember.account, model.newMember.authCode), model.newMember.email);
 
-                    //將會員記錄新增到Member資料表
-                    db.Member.Add(newMember);
+                //將會員記錄新增到Member資料表
+                db.Member.Add(model.newMember);
 
-                    db.SaveChanges();
+                db.SaveChanges();
 
-                }
-                catch (Exception e)
-                {
-                    throw new CustomException(e.ToString());
-                }
-
-                return Ok("註冊成功");
+            }
+            catch (Exception e)
+            {
+                throw new CustomException(e.ToString());
+            }
+            //建立list處存興趣
+            List<Interest> intrestsList = new List<Interest>();
+            foreach (var interest in model.interest)
+            {
+                intrestsList.Add(new Interest { account = model.newMember.account, tag = interest });
+            }
+            //將興趣存入資料表
+            try
+            {
+                db.Interest.AddRange(intrestsList);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(ex.ToString());
             }
 
-            throw new CustomException("此帳號己有人使用，註冊失敗！");
+            return Ok("註冊成功");
+
         }
 
         public class RegisterValidateViewModel
@@ -141,7 +163,7 @@ namespace vagetableAPI.Controllers
                 }
                 else if (member.authCode.First() == ' ')
                 {
-                   throw new CustomException("已經通過驗證，直接登入即可");
+                    throw new CustomException("已經通過驗證，直接登入即可");
                 }
                 else if (member.authCode == auth.authCode)
                 {
@@ -159,6 +181,7 @@ namespace vagetableAPI.Controllers
                 throw new Exception(ex.ToString());
             }
         }
+
 
     }
 }
