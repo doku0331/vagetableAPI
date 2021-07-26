@@ -215,6 +215,7 @@
     <Compile Include="ViewModels\FoodCreateViewModel.cs" />
     <Compile Include="ViewModels\FoodListViewModel.cs" />
     <Compile Include="ViewModels\FrigEditViewModel.cs" />
+    <Compile Include="ViewModels\IngridentViewModel.cs" />
     <Compile Include="ViewModels\MembersLoginViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />

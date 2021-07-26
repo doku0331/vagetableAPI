@@ -139,6 +139,7 @@ namespace vagetableAPI.Controllers
         #endregion 
 
         //TODO: 把上傳的圖片做重新命名的處理
+        //TODO: 確認多人同時上傳同名食物時 因為自動增加 所以要先查詢一次 才能取得剛剛加入的食物ID 資料庫的處理為何
         /// <summary>
         /// 新增食物進冰箱 注意:請使用 Content-Type:multipart/form-data  需要必要(food_name、type、expire_date)非必要(photo、價格、註解)
         /// </summary>
@@ -214,7 +215,7 @@ namespace vagetableAPI.Controllers
                 throw new CustomException(ex.ToString());
             }
             //把剛剛新增的食物的id放進紀錄
-            log.food_id = db.Food.Where(x => x.fridge_id == fridgeId).Select(x => x.id).Max();
+            log.food_id = db.Food.Where(x => x.food_name == newfood.food_name).Select(x => x.id).Max();
             try
             {
                 //將log新增到log

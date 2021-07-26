@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using vagetableAPI.Filters;
 using vagetableAPI.Models;
+using vagetableAPI.ViewModels;
 
 namespace vagetableAPI.Controllers
 {
@@ -25,21 +26,22 @@ namespace vagetableAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("List/")]
-        public List<Recipe> List(int page=1)
+        public List<Recipe> List(int page = 1)
         {
             //設定每一頁有多少資料
             var pageSize = 6;
             //取得該頁數的資料
-            var result = db.Recipe.OrderBy(x=> x.created_time).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var result = db.Recipe.OrderBy(x => x.created_time).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return result;
         }
 
+        //TODO: 同食物 確認多人同時上傳時是否會正確回傳剛才新增的ID 如果不行就要取消自動增加 在新增前就取得id 請確認是否有可能有資料庫撞號碼
         /// <summary>
-        /// 新增食譜 注意:請使用 Content-Type:multipart/form-data  需要必要(food_name、type、expire_date)非必要(photo、價格、註解)
+        /// 新增食譜 返回新增的食譜的id， 注意:請使用 Content-Type:multipart/form-data 
         /// </summary>
-        /// <param name="fridgeId"></param>
         /// <returns></returns>
         [HttpPost]
+        [JwtAuthorize]
         [Route("Create/")]
         public object Create()
         {
@@ -87,9 +89,48 @@ namespace vagetableAPI.Controllers
             }
             catch (Exception ex)
             {
+                throw new Exception(ex.ToString());
+            }
+
+            var recipeId = db.Recipe.Where(x => x.recipe_name == newRecipe.recipe_name)
+                           .Select(x => x.recipe_id).Max();
+
+            return new { RecipeId =  recipeId };
+        }
+
+        //TODO: 測試此api
+        /// <summary>
+        /// 新增食材
+        /// </summary>
+        /// <param name="recipeId">指定食譜</param>
+        /// <param name="model">食材列表</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CreateIngrident/{recipeId}")]
+        public object CreateIngrident(int recipeId, ingridentList model)
+        {
+            List<Ingredient> newIngridentList = new List<Ingredient>();
+            foreach (var ingrident in model.ingredient)
+            {
+                newIngridentList.Add(
+                    new Ingredient 
+                    {
+                        recipe_id =recipeId ,
+                        name = ingrident.name ,
+                        amount = ingrident.amount 
+                    });
+            }
+            //將興趣存入資料表
+            try
+            {
+                db.Ingredient.AddRange(newIngridentList);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
                 throw new CustomException(ex.ToString());
             }
-            return Ok("新增食譜成功");
+            return Ok("新增食材成功");
         }
     }
 }
