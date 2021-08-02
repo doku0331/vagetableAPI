@@ -136,6 +136,10 @@ Content-Type: multipart/form-data
     ``` 
     {
     "fName": "string"
+    "Owners": [
+        "testtest002",
+        "testtest003"
+    ]
     }
     ```
   * response (成功的話)
