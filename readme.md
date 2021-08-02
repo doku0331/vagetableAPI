@@ -107,7 +107,20 @@ Content-Type: multipart/form-data
     {
       "success": true,
       "msg": null,
-      "data": [ memberId ]
+      "data": [
+        {
+            "fId": 2,
+            "fName": "我愛的冰箱"
+        },
+        {
+            "fId": 3,
+            "fName": "學校的冰箱"
+        },
+        {
+            "fId": 5,
+            "fName": "家裡冰箱"
+        }
+      ]
     }
     ```
 * POST /api/fridge/Create
@@ -244,8 +257,8 @@ Content-Type: multipart/form-data
             "expire_date": "2021-06-24T00:00:00",
             "food_name": "小白菜"
         }
-    ]
-}
+      ]
+    }
     ```
 
 * GET /api/food/search/{fridgeId}?search={搜尋字串}
@@ -280,9 +293,16 @@ Content-Type: multipart/form-data
 
 * POST /api/food/Create/{fridgeId}
   * 新增食物進冰箱 
-  * 注意: 若有圖片請使用 Content-Type:multipart/form-data 
+  * 注意: 請使用 Content-Type:multipart/form-data 
   * 必要參數(名稱food_name、類別type、過期日expire_date)
   * 可以不填(照片photo、價格price、附註comment)
+  * header 
+    * 請把Content-Type改為
+  ```
+  {
+    Content-Type:multipart/form-data
+  }
+  ```
   *  request 
   ```
   {
@@ -334,3 +354,53 @@ GET /api/recipe/List
     }
     ```
 
+POST /api/recipe/Create
+* 新增食譜 返回新增的該食譜的id， 注意:請使用Content-Type:multipart/form-data
+  * header 
+    * 請把Content-Type改為
+    ```
+    {
+      Content-Type:multipart/form-data
+    }
+    ```
+  * request
+    ``` 
+    recipe_name:string
+    step:string
+    photo:file
+    ```
+  * response (成功的話)
+    ```
+    {
+      "success": true,
+      "msg": null,
+      "data": {
+        "RecipeId": 10
+      }
+    }
+    ```
+POST /api/recipe/CreateIngrident/{recipeId}
+* 新增食材
+  * request
+    ``` 
+    { 
+      "ingredient": [
+        { 
+		"name": "隨便", 
+        "amount": "一個"
+        },
+        { 
+		"name": "大便", 
+        "amount": "一個"
+        }
+      ]
+    }
+    ```
+  * response (成功的話)
+    ```
+    {
+      "success": true,
+      "msg": null,
+      "data": "新增食材成功"
+    }
+    ```
