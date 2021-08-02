@@ -18,6 +18,7 @@ namespace vagetableAPI.Controllers
         dbVagetableBasketEntities db = new dbVagetableBasketEntities();
 
         FridgeService fridgeService = new FridgeService();
+        MembersDBService membersDBService = new MembersDBService();
 
         /// <summary>
         /// 列出所有冰箱
@@ -35,6 +36,7 @@ namespace vagetableAPI.Controllers
             return fridges;
         }
 
+
         /// <summary>
         /// 建立冰箱
         /// </summary>
@@ -42,38 +44,51 @@ namespace vagetableAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/fridge/Create")]
-        public object Create(Fridge fridge)
+        public object Create(FridgeCreateViewModel fridge)
         {
             //驗證模型是否通過
-            if (ModelState.IsValid)
-            {
-                //實體化新的使用者模型
-                Own_Fridge owntemp = new Own_Fridge
-                {
-                    account = User.Identity.Name
-                };
-                //實體化新的冰箱模型
-                Fridge newFridge = new Fridge
-                {
-                    fName = fridge.fName
-                };
-                try
-                {
-                    //新增
-                    db.Fridge.Add(newFridge);
-                    db.Own_Fridge.Add(owntemp);
-                    db.SaveChanges();
-                }catch(Exception ex)
-                {
-                    throw new CustomException(ex.ToString());
-                }
-                //重導向回冰箱列表
-                return Ok("冰箱建立成功");
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 throw new CustomException("冰箱建立失敗");
             }
+            //建立list處存使用者清單
+            List<Own_Fridge> ownerList = new List<Own_Fridge>();
+            foreach (var Owner in fridge.Owners)
+            {
+                if (membersDBService.CheckExist(Owner))
+                {
+                    ownerList.Add(new Own_Fridge { account = Owner });
+                }
+                else
+                {
+                    throw new CustomException(Owner + "為不存在之會員");
+                }
+            }
+
+            //把當下使用者也加入
+            ownerList.Add(new Own_Fridge{ account = User.Identity.Name});
+
+            //實體化新的冰箱模型
+             Fridge newFridge = new Fridge
+            {
+                fName = fridge.fName
+            };
+            try
+            {
+                //新增
+                db.Fridge.Add(newFridge);
+                //新增時候上面的fridge的id會自動填入下面的 我也不知道為啥
+                db.Own_Fridge.AddRange(ownerList);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(ex.ToString());
+            }
+
+            //重導向回冰箱列表
+            return Ok("冰箱建立成功");
+
         }
         /// <summary>
         /// 取得指定冰箱的使用者

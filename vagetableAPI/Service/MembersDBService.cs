@@ -254,5 +254,19 @@ namespace vagetableAPI.Service
                 return "舊密碼輸入錯誤";
             }
         }
+        //若會員存在回傳true 若不存在則為false
+        public bool CheckExist(string user)
+        {
+            //撈出會員
+            var member = db.Member.Where(m => m.account == user).FirstOrDefault();
+            if(member != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

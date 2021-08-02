@@ -49,7 +49,8 @@ namespace vagetableAPI.Controllers
             else if (membersService.PasswordCheck(member, loginData.Password) && member.authCode.First() == ' ')
             {
                 var token = jwtService.GenerateToken(loginData);
-                return token;
+                var intrest = db.Interest.Where(x => x.account == loginData.Account).Select(x=> x.tag).ToList();
+                return new { Token =  token , Intrest = intrest};
             }
             else if (!membersService.PasswordCheck(member, loginData.Password))
             {

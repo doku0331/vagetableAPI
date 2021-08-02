@@ -9,6 +9,7 @@
 
 namespace vagetableAPI.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -17,7 +18,8 @@ namespace vagetableAPI.Models
         public int id { get; set; }
         public string account { get; set; }
         public string tag { get; set; }
-    
+
+        [JsonIgnore]
         public virtual Member Member { get; set; }
     }
 }

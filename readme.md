@@ -46,7 +46,14 @@ Content-Type: multipart/form-data
   { 
     "success": true,
     "msg": null,
-    "data": token
+     "data": {
+        "Token": "String",
+        "Intrest": [
+            "炭烤",
+            "日式",
+            "家常料理"
+        ]
+    }
   }
   ```
 

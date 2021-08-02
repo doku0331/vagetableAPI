@@ -214,6 +214,7 @@
     <Compile Include="ViewModels\ExpiredFoodViewModel.cs" />
     <Compile Include="ViewModels\FoodCreateViewModel.cs" />
     <Compile Include="ViewModels\FoodListViewModel.cs" />
+    <Compile Include="ViewModels\FridgeCreateViewModel.cs" />
     <Compile Include="ViewModels\FrigEditViewModel.cs" />
     <Compile Include="ViewModels\IngridentViewModel.cs" />
     <Compile Include="ViewModels\MembersLoginViewModel.cs" />
