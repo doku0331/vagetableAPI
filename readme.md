@@ -1,3 +1,7 @@
+## 更動紀錄
+* 2021/8/9 新增GetAllFridgeData 的API於fridge類別中
+  
+## 注意事項
 請自行在專案中加入以下檔案  
 App_Data/dbVagetableBasket.mdf  
 Services/setting.json
