@@ -104,8 +104,8 @@ namespace vagetableAPI.Controllers
                 throw new CustomException("你沒有冰箱權限");
             }
            
-            var Owner = db.Own_Fridge.Where(n => n.fid == fridgeid).Select(x=> x.account).ToList();
-            return Owner;
+            var Owners = db.Own_Fridge.Where(n => n.fid == fridgeid).Select(x=> x.account).ToList();
+            return Owners;
         }
 
         // TODO: 把新增成員做成連結讓人加入
@@ -239,6 +239,42 @@ namespace vagetableAPI.Controllers
 
             return Ok("刪除成功");
             
+        }
+        public class AllFridgeDataViewModel
+        {
+            public string fname { get; set; }
+            public IEnumerable<string> members { get; set; }
+            public IEnumerable<Food> food { get; set; }
+        }
+        /// <summary>
+        /// 列出所有冰箱
+        /// </summary>
+        /// <returns>冰箱物件</returns>
+        [HttpGet]
+        [Route("api/fridge/GetAllFridgeData")]
+        public IEnumerable<AllFridgeDataViewModel> GetAllFridgeData()
+        {
+            //建立列表儲存食物
+            List<AllFridgeDataViewModel> allFridgeData = new List<AllFridgeDataViewModel>();
+
+            //撈出使用者擁有的所有冰箱冰箱
+            var fridges = (from m in db.Own_Fridge
+                           join n in db.Fridge on m.fid equals n.fId
+                           where m.account == User.Identity.Name
+                           select n).ToList();
+
+            //歷遍所有冰箱撈出名稱成員與食物
+            foreach (var fridge in fridges)
+            {
+                AllFridgeDataViewModel data = new AllFridgeDataViewModel();
+                data.fname = fridge.fName;
+                data.members = db.Own_Fridge.Where(n => n.fid == fridge.fId).Select(x => x.account).ToList();
+                data.food = db.Food.Where(m => m.fridge_id == fridge.fId).OrderBy(x => x.expire_date).ToList();
+
+                allFridgeData.Add(data);
+            }
+
+            return allFridgeData;
         }
     }
 }
