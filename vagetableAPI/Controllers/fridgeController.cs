@@ -246,10 +246,11 @@ namespace vagetableAPI.Controllers
             public IEnumerable<string> members { get; set; }
             public IEnumerable<Food> food { get; set; }
         }
+
         /// <summary>
-        /// 列出所有冰箱
+        /// 列出所有擁有的冰箱和每個冰箱的使用者與食物
         /// </summary>
-        /// <returns>冰箱物件</returns>
+        /// <returns>(冰箱名，使用者們，冰箱內的食物)的集合</returns>
         [HttpGet]
         [Route("api/fridge/GetAllFridgeData")]
         public IEnumerable<AllFridgeDataViewModel> GetAllFridgeData()

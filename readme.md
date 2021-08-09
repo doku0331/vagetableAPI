@@ -214,6 +214,78 @@ Content-Type: multipart/form-data
     }
     ```
 
+* GET /api/fridge/GetAllFridgeData
+  * 列出所有擁有的冰箱和每個冰箱的使用者與食物
+  * request
+    ``` 
+    null
+    ```
+  * response (成功的話)
+    ```
+    {
+    "success": true,
+    "msg": null,
+    "data": [
+        {
+            "fname": "api改名字",
+            "members": [
+                "testtest006",
+                "testtest003"
+            ],
+            "food": [
+                {
+                    "id": 24,
+                    "fridge_id": 10,
+                    "food_name": "有錢錢2",
+                    "price": 200,
+                    "photo": "hqdefault.jpg",
+                    "type": "其他",
+                    "expire_date": "2021-08-15T00:00:00",
+                    "comment": "null"
+                },
+                {
+                    "id": 25,
+                    "fridge_id": 10,
+                    "food_name": "有錢錢2",
+                    "price": 200,
+                    "photo": "hqdefault.jpg",
+                    "type": "其他",
+                    "expire_date": "2021-08-15T00:00:00",
+                    "comment": "null"
+                }
+            ]
+        },
+        {
+            "fname": "string",
+            "members": [
+                "testtest006"
+            ],
+            "food": [
+              {
+                    "id": 24,
+                    "fridge_id": 10,
+                    "food_name": "有錢錢2",
+                    "price": 200,
+                    "photo": "hqdefault.jpg",
+                    "type": "其他",
+                    "expire_date": "2021-08-15T00:00:00",
+                    "comment": "null"
+                },
+                {
+                    "id": 25,
+                    "fridge_id": 10,
+                    "food_name": "有錢錢2",
+                    "price": 200,
+                    "photo": "hqdefault.jpg",
+                    "type": "其他",
+                    "expire_date": "2021-08-15T00:00:00",
+                    "comment": "null"
+                }
+            ]
+        }
+      ]
+    }
+    ```
 
 ## Food 關於食物類的api
 * GET /api/food/Getfood/{fridgeId}?page={page}
