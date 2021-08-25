@@ -117,6 +117,8 @@ namespace vagetableAPI.Controllers
                             join y in fridge on x.fridge_id equals y.fId
                             select new ExpiredFoodViewModel
                             {
+                                FridgeId= x.fridge_id,
+                                FoodId = x.id,
                                 food_name = x.food_name,
                                 expire_date = x.expire_date,
                                 fName = y.fName
