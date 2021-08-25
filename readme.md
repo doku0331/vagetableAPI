@@ -1,4 +1,7 @@
 ## 更動紀錄
+* 2021/8/25 
+  * 把過期食物的api修改成回傳回冰箱與食物的id
+  * 修改依照冰箱取得食物的api改為可以依照頁數取得與取得全部
 * 2021/8/9 新增GetAllFridgeData 的API於fridge類別中
   
 ## 注意事項
@@ -292,8 +295,37 @@ Content-Type: multipart/form-data
     ```
 
 ## Food 關於食物類的api
-* GET /api/food/Getfood/{fridgeId}?page={page}
-  * 取得指定冰箱中的食物
+* GET /api/food/Getfood/{fridgeId}
+  * 取得指定冰箱中的所有食物
+  * request
+    ``` 
+    null
+    ```
+  * response (成功的話)
+    ```
+    {
+    "success": true,
+    "msg": null,
+    "data": {
+        "fridgeId": 10,
+        "FridgeName": "api改名字",
+        "food": [
+            {
+                "id": 21,
+                "fridge_id": 10,
+                "food_name": "有錢錢",
+                "price": 200,
+                "photo": null,
+                "type": "其他",
+                "expire_date": "2021-08-15T00:00:00",
+                "comment": "null"
+            }
+        ]
+      }
+    }
+    ```
+* GET /api/food/GetFoodByPage/{fridgeId}?page={page}
+  * 依照每頁五筆食物取得指定冰箱中的食物
   * request
     ``` 
     null
@@ -334,12 +366,16 @@ Content-Type: multipart/form-data
     "success": true,
     "msg": null,
     "data": [
-        {
+        { 
+            "FoodId": 4,
+            "FridgeId": 2,
             "fName": "我愛的冰箱",
             "expire_date": "2021-06-14T00:00:00",
             "food_name": "高麗菜"
         },
         {
+            "FoodId": 4,
+            "FridgeId": 2,
             "fName": "我愛的冰箱",
             "expire_date": "2021-06-24T00:00:00",
             "food_name": "小白菜"
