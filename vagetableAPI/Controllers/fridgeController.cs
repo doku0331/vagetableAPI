@@ -51,17 +51,21 @@ namespace vagetableAPI.Controllers
             {
                 throw new CustomException("冰箱建立失敗");
             }
+           
             //建立list處存使用者清單
             List<Own_Fridge> ownerList = new List<Own_Fridge>();
-            foreach (var Owner in fridge.Owners)
+            if (fridge.Owners != null)
             {
-                if (membersDBService.CheckExist(Owner))
+                foreach (var Owner in fridge.Owners)
                 {
-                    ownerList.Add(new Own_Fridge { account = Owner });
-                }
-                else
-                {
-                    throw new CustomException(Owner + "為不存在之會員");
+                    if (membersDBService.CheckExist(Owner))
+                    {
+                        ownerList.Add(new Own_Fridge { account = Owner });
+                    }
+                    else
+                    {
+                        throw new CustomException(Owner + "為不存在之會員");
+                    }
                 }
             }
 

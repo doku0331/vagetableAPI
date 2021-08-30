@@ -1,4 +1,5 @@
 ## 更動紀錄
+* 2021/8/30 修正冰箱的新增功能輸入Null會出問題的bug
 * 2021/8/25 
   * 把過期食物的api修改成回傳回冰箱與食物的id
   * 修改依照冰箱取得食物的api改為可以依照頁數取得與取得全部
@@ -138,7 +139,7 @@ Content-Type: multipart/form-data
     }
     ```
 * POST /api/fridge/Create
-  * 建立冰箱
+  * 建立冰箱和新增自己以外的會員(Owners可以不填)
   * request
     ``` 
     {
