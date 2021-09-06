@@ -204,20 +204,20 @@ namespace vagetableAPI.Controllers
                 expire_date = DateTime.Parse(formData["expire_date"]),
                 comment = formData["comment"]
             };
-            //建立log物件實體
-            var log = new Log
-            {
-                account = User.Identity.Name,
-                fridge_id = fridgeId,
-                buy_time = DateTime.Now,
-                type = formData["type"]
-            };
+            ////建立log物件實體
+            //var log = new Log
+            //{
+            //    account = User.Identity.Name,
+            //    fridge_id = fridgeId,
+            //    buy_time = DateTime.Now,
+            //    type = formData["type"]
+            //};
 
             if (formData["price"]!=null)
             {
                 int price = Int32.Parse(formData["price"]);
                 newfood.price = price;
-                log.price = price;
+                //log.price = price;
             }
             //若有夾帶圖片
             if (request.Files.Count > 0 && request.Files[0].ContentType!=null)
@@ -247,17 +247,17 @@ namespace vagetableAPI.Controllers
                 throw new CustomException(ex.ToString());
             }
             //把剛剛新增的食物的id放進紀錄
-            log.food_id = db.Food.Where(x => x.food_name == newfood.food_name).Select(x => x.id).Max();
-            try
-            {
-                //將log新增到log
-                db.Log.Add(log);
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new CustomException(ex.ToString());
-            }
+            //log.food_id = db.Food.Where(x => x.food_name == newfood.food_name).Select(x => x.id).Max();
+            //try
+            //{
+            //    //將log新增到log
+            //    db.Log.Add(log);
+            //    db.SaveChanges();
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new CustomException(ex.ToString());
+            //}
             return Ok("新增食物成功");
         }
 
@@ -271,9 +271,15 @@ namespace vagetableAPI.Controllers
         [Route("api/food/Delete/{fridgeid}/{id}")]
         public object delete(int fridgeid, int id)
         {
+            if (!fridgeService.OwnFridgeCheck(fridgeid, User.Identity.Name))
+            {
+                throw new CustomException("你沒有冰箱權限");
+            }
             try
             {
                 var deletefood = db.Food.Where(x => x.fridge_id == fridgeid && x.id == id).FirstOrDefault();
+                //var deleteLog = db.Log.Where(x => x.fridge_id == fridgeid && x.food_id == id).FirstOrDefault();
+                //db.Log.Remove(deleteLog);
                 db.Food.Remove(deletefood);
                 db.SaveChanges();
 
