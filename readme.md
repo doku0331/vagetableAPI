@@ -8,6 +8,8 @@
 ## 注意事項
 請自行在專案中加入以下檔案  
 App_Data/dbVagetableBasket.mdf  
+檔案位置:
+https://drive.google.com/file/d/1dnC_vy25c9q-NrIhDbTyapIN2YDQp7Uk/view?usp=sharing
 Services/setting.json
 
 setting.json格式為  
