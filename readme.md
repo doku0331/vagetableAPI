@@ -31,14 +31,12 @@ setting.json格式為
 }
 ```
 所有的都必須在header加上這個  
-Content-Type: application/json
-如果有需要傳送圖片要加上  
-Content-Type:multipart/form-data 
+Content-Type: application/json  
+如果有需要傳送圖片要加上   
+Content-Type:multipart/form-data   
 如果需要授權則要加上  
 Authorization: Bearer {token}   
-如果有圖片
-則需加入
-Content-Type: multipart/form-data
+
 
 
 ## member 關於會員類的api
